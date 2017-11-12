@@ -6,38 +6,38 @@ class ForwardList {
 
 private:
     struct Node {
-        T _data;
+        T data;
         Node *next;
     };
 
     Node *head, *tail;
-    unsigned _size;
+    unsigned size;
 
 public:
     ForwardList() {
         head = tail = nullptr;
-        _size = 0;
+        size = 0;
     }
 
     ~ForwardList() {
 
     }
 
-    void push_front(const T data) {
+    void push_front(const T _data) {
         if (head == nullptr) {
             head = new Node;
-            head->_data = data;
+            head->data = _data;
             head->next = nullptr;
         }
 
         else {
             Node *newNode = new Node;
-            newNode->_data = data;
+            newNode->data = _data;
             newNode->next = head;
             head = newNode;
         }
 
-        _size++;
+        size++;
     }
 
     void pop_front() {
@@ -56,22 +56,22 @@ public:
             delete temp;
         }
 
-        _size--;
+        size--;
     }
 
     T front() const {
         if (head == nullptr)
             throw std::runtime_error("error: empty forward list");
         else
-            return head->_data;
+            return head->data;
     }
 
     unsigned size() const {
-        return _size;
+        return size;
     }
 
     bool isEmpty() const {
-        return _size > 0 ? false : true;
+        return size > 0 ? false : true;
     }
 
 };
