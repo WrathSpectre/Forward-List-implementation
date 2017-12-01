@@ -1,5 +1,5 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef FORWARDLIST_H
+#define FORWARDLIST_H
 
 template <typename T>
 class ForwardList {
