@@ -1,5 +1,5 @@
-#ifndef FORWARD_LIST_H
-#define FORWARD_LIST_H
+#ifndef LIST_H
+#define LIST_H
 
 template <typename T>
 class ForwardList {
@@ -14,66 +14,174 @@ private:
     unsigned size;
 
 public:
-    ForwardList() {
+    ForwardList ()
+    {
         head = tail = nullptr;
         size = 0;
     }
 
-    ~ForwardList() {
+    ~ForwardList ()
+    {
 
     }
 
-    void push_front(const T _data) {
-        if (head == nullptr) {
-            head = new Node;
+    void push_front (const T _data)
+    {
+        if (head == nullptr)
+        {
+            head = tail = new Node;
             head->data = _data;
             head->next = nullptr;
+            head = tail;
         }
 
-        else {
+        else
+        {
             Node *newNode = new Node;
             newNode->data = _data;
             newNode->next = head;
+
             head = newNode;
         }
 
-        size++;
+        ++size;
     }
 
-    void pop_front() {
+    void push_back (const T _data)
+    {
+        if (head == nullptr)
+        {
+            head = tail = new Node;
+            head->data = _data;
+            head->next = nullptr;
+
+            head = tail;
+        }
+
+        else
+        {
+            Node *newNode = new Node;
+            newNode->data = _data;
+            newNode->next = nullptr;
+
+            tail->next = newNode;
+            tail = newNode;
+        }
+
+        ++size;
+    }
+
+    void pop_front()
+    {
+        Node *tmp = head->next;
+        delete head;
+        head = tmp;
+
+        --size;
+    }
+
+    void pop_back()
+    {
         if (head == nullptr)
             throw std::runtime_error("error: empty forward list");
 
-        else if (head == tail) {
+        else if (head == tail)
+        {
             delete head, tail;
             head = tail = nullptr;
         }
 
-        else {
-            Node *temp = new Node;
-            temp = head;
-            head = head->next;
-            delete temp;
+        else
+        {
+            Node *current = head, *previous;
+
+            while (current->next != nullptr)
+            {
+                previous = current;
+                current = current->next;
+            }
+
+            tail = previous;
+            previous->next = nullptr;
+
+            delete current;
         }
 
-        size--;
+        --size;
     }
 
-    T front() const {
-        if (head == nullptr)
-            throw std::runtime_error("error: empty forward list");
+    void insert (const unsigned index, const T _data)
+    {
+        if (index == 0 || index > size)
+            throw std::runtime_error("error: index out of scope");
+
         else
-            return head->data;
+        {
+            Node *tmp = new Node;
+            tmp->data = _data;
+
+            if (index == 1)
+            {
+                tmp->next = head;
+                head = tmp;
+
+                ++size;
+            }
+
+            else
+            {
+                Node *previous, *current = head;
+
+                for (unsigned i = 1; i < index; ++i) {
+                    previous = current;
+                    current = current->next;
+                }
+
+                tmp->next = previous->next;
+                previous->next = tmp;
+
+                ++size;
+            }
+        }
     }
 
-    unsigned size() const {
+    void remove(const unsigned index)
+    {
+        if(index == 0 || index > size )
+            throw std::runtime_error("error: index out of scope");
+
+        else if(index == 1) {
+            Node *tmp = head;
+            head = head->next;
+            delete tmp;
+
+            --size;
+        }
+
+        else {
+            Node *previous, *current = head;
+
+            for (unsigned i = 1; i < index; ++i) {
+                previous = current;
+                current = current->next;
+            }
+
+            previous->next = current->next;
+            delete current;
+
+            --size;
+        }
+    }
+
+    unsigned Size() const
+    {
         return size;
     }
 
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return size > 0 ? false : true;
     }
-
 };
 
 #endif
